@@ -15,7 +15,7 @@
             <th>Status</th>
             <th>Actions</th>
         </tr>
-        {% database in databases %}
+        {% for database in databases %}
         <tr>
             <td>postgrest.{{database}}.service</td>
             <td><span id="status-{{database}}">Loading...</span></td>
