@@ -66,7 +66,6 @@ async def handle_form(request: Request, action: str = Form(...), service: str = 
 @app.get("/status/{service_name}")
 def get_service_status(service_name: str):
     command = ["systemctl", "status", f'postgrest.{service_name}.service']
-    print(command)
     result = subprocess.run(command, capture_output=True)
     return {"status": result.stdout.decode()}
 
