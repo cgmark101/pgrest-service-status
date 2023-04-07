@@ -25,6 +25,9 @@ async def handle_form(request: Request, action: str = Form(...), service: str = 
     elif action == "restart":
         process = await asyncio.create_subprocess_exec("sudo", "systemctl", "restart", f'postgrest.{service}.service')
         await process.wait()
+    elif action == "start":
+        process = await asyncio.create_subprocess_exec("sudo", "systemctl", "start", f'postgrest.{service}.service')
+        await process.wait()
     return await read_root(request)
 
 
