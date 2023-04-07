@@ -1,7 +1,5 @@
 <!DOCTYPE html>
 <html>
-
-{{ databases | safe }}
 <head>
     <meta charset="UTF-8">
     <title>Service Status</title>
@@ -15,16 +13,7 @@
             <th>Status</th>
             <th>Actions</th>
         </tr>
-        {% for database in databases %}
-        <tr>
-            <td>postgrest.{{database}}.service</td>
-            <td><span id="status-{{database}}">Loading...</span></td>
-            <td>
-                <button onclick="stopService({{database}})">Stop</button>
-                <button onclick="restartService({{database}})">Restart</button>
-            </td>
-        </tr>
-        {% endfor %}
+
         <tr>
             <td>postgrest.admision.service</td>
             <td><span id="status-admision">Loading...</span></td>
