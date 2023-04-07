@@ -85,7 +85,14 @@
         }
 
         function restartService(serviceName) {
-            fetch(`/action/restart`)
+            const data = new FormData();
+            data.append("action", "restart");
+            data.append("service", serviceName);
+
+            fetch("/action/restart", {
+                method: "POST",
+                body: data
+            })
                 .then(() => {
                     updateStatus(serviceName, `status-${serviceName}`);
                 })
@@ -95,7 +102,14 @@
         }
 
         function startService(serviceName) {
-            fetch(`/action/start/`)
+            const data = new FormData();
+            data.append("action", "start");
+            data.append("service", serviceName);
+
+            fetch("/action/start", {
+                method: "POST",
+                body: data
+            })
                 .then(() => {
                     updateStatus(serviceName, `status-${serviceName}`);
                 })
