@@ -19,11 +19,13 @@
             <tr>
                 <th scope="col">Servicio</th>
                 <th scope="col">Estatus</th>
+                <th scope="col">Endpoint</th>
                 <th scope="col">Acciones</th>
             </tr>
             <tr>
                 <td>postgrest.admision.service</td>
                 <td><span id="status-admision">Loading...</span></td>
+                <td><a href="/api/v1/admision"></a></td>
                 <td>
                     <button type="button" class="btn btn-danger" onclick="stopService('admision')">Detener</button>
                     <button type="button" class="btn btn-primary" onclick="restartService('admision')">Reiniciar</button>
