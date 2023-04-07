@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Service Status</title>
+</head>
+<body>
+    <h1>Service Status</h1>
+    <table>
+        <tr>
+            <th>Service Name</th>
+            <th>Status</th>
+        </tr>
+        <tr>
+            <td>postgrest.admision.service</td>
+            <td><span id="status-admision">Loading...</span></td>
+        </tr>
+        <tr>
+            <td>postgrest.cc2000.service</td>
+            <td><span id="status-cc2000">Loading...</span></td>
+        </tr>
+        <!-- add more services here -->
+    </table>
+    <script>
+        function updateStatus(serviceName, elementId) {
+            fetch(`/status/${serviceName}`)
+            .then(response => response.json())
+            .then(data => {
+                const statusSpan = document.getElementById(elementId);
+                if (data.status.includes("active (running)")) {
+                    statusSpan.innerText = "Running";
+                    statusSpan.style.color = "green";
+                } else if (data.status.includes("inactive (dead)")) {
+                    statusSpan.innerText = "Stopped";
+                    statusSpan.style.color = "red";
+                } else {
+                    statusSpan.innerText = "Error";
+                    statusSpan.style.color = "orange";
+                }
+            })
+            .catch(error => {
+                const statusSpan = document.getElementById(elementId);
+                statusSpan.innerText = "Error";
+                statusSpan.style.color = "orange";
+            });
+        }
+        updateStatus("admision", "status-admision");
+        updateStatus("cc2000", "status-cc2000");
+        <!-- add more services here -->
+    </script>
+</body>
+</html>
