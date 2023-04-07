@@ -17,8 +17,6 @@ templates = Jinja2Templates(directory="templates")
 async def read_root(request: Request):
     return templates.TemplateResponse("index.html", {'request':request})
 
-
-
 @app.post("/status")
 async def handle_form(request: Request, action: str = Form(...), service: str = Form(...)):
     if action == "stop":
@@ -27,7 +25,7 @@ async def handle_form(request: Request, action: str = Form(...), service: str = 
     elif action == "restart":
         process = await asyncio.create_subprocess_exec("sudo", "systemctl", "restart", f'postgrest.{service}.service')
         await process.wait()
-    return read_root(request)
+    return await read_root(request)
 
 
 @app.get("/status/{service_name}")
