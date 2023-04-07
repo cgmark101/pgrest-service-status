@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8">
     <title>Service Status</title>
 </head>
+
 <body>
     <h1>Service Status</h1>
     <table>
@@ -44,55 +46,62 @@
     <script>
         function updateStatus(serviceName, elementId) {
             fetch(`/status/${serviceName}`)
-            .then(response => response.json())
-            .then(data => {
-                const statusSpan = document.getElementById(elementId);
-                if (data.status.includes("active (running)")) {
-                    statusSpan.innerText = "Running";
-                    statusSpan.style.color = "green";
-                } else if (data.status.includes("inactive (dead)")) {
-                    statusSpan.innerText = "Stopped";
-                    statusSpan.style.color = "red";
-                } else {
+                .then(response => response.json())
+                .then(data => {
+                    const statusSpan = document.getElementById(elementId);
+                    if (data.status.includes("active (running)")) {
+                        statusSpan.innerText = "Running";
+                        statusSpan.style.color = "green";
+                    } else if (data.status.includes("inactive (dead)")) {
+                        statusSpan.innerText = "Stopped";
+                        statusSpan.style.color = "red";
+                    } else {
+                        statusSpan.innerText = "Error";
+                        statusSpan.style.color = "orange";
+                    }
+                })
+                .catch(error => {
+                    const statusSpan = document.getElementById(elementId);
                     statusSpan.innerText = "Error";
                     statusSpan.style.color = "orange";
-                }
-            })
-            .catch(error => {
-                const statusSpan = document.getElementById(elementId);
-                statusSpan.innerText = "Error";
-                statusSpan.style.color = "orange";
-            });
+                });
         }
 
         function stopService(serviceName) {
-            fetch(`/action/stop`)
-            .then(() => {
-                updateStatus(serviceName, `status-${serviceName}`);
+            const data = new FormData();
+            data.append("action", "stop");
+            data.append("service", serviceName);
+
+            fetch("/action/stop", {
+                method: "POST",
+                body: data
             })
-            .catch(error => {
-                console.log(error);
-            });
+                .then(() => {
+                    updateStatus(serviceName, `status-${serviceName}`);
+                })
+                .catch(error => {
+                    console.log(error);
+                });
         }
 
         function restartService(serviceName) {
             fetch(`/action/restart`)
-            .then(() => {
-                updateStatus(serviceName, `status-${serviceName}`);
-            })
-            .catch(error => {
-                console.log(error);
-            });
+                .then(() => {
+                    updateStatus(serviceName, `status-${serviceName}`);
+                })
+                .catch(error => {
+                    console.log(error);
+                });
         }
 
         function startService(serviceName) {
             fetch(`/action/start/`)
-            .then(() => {
-                updateStatus(serviceName, `status-${serviceName}`);
-            })
-            .catch(error => {
-                console.log(error);
-            });
+                .then(() => {
+                    updateStatus(serviceName, `status-${serviceName}`);
+                })
+                .catch(error => {
+                    console.log(error);
+                });
         }
 
         updateStatus("admision", "status-admision");
@@ -101,4 +110,5 @@
         <!-- add more services here -->
     </script>
 </body>
+
 </html>
