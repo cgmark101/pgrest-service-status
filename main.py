@@ -19,6 +19,7 @@ async def read_root(request: Request):
 
 @app.post("/action/stop")
 async def handle_form(request: Request, action: str = Form(...), service: str = Form(...)):
+    print(action, service)
     process = await asyncio.create_subprocess_exec("sudo", "systemctl", "stop", f'postgrest.{service}.service')
     await process.wait()
     return await read_root(request)
