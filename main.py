@@ -44,28 +44,29 @@ async def read_root(request: Request):
 @app.post("/action/stop")
 async def handle_form(request: Request, action: str = Form(...), service: str = Form(...)):
     if action == "stop":
-        process = await asyncio.create_subprocess_exec("sudo", "systemctl", "stop", f'{service}.service')
+        process = await asyncio.create_subprocess_exec("sudo", "systemctl", "stop", f'postgrest.{service}.service')
         await process.wait()
         return await read_root(request)
 
 @app.post("/action/restart")
 async def handle_form(request: Request, action: str = Form(...), service: str = Form(...)):
     if action == "restart":
-        process = await asyncio.create_subprocess_exec("sudo", "systemctl", "restart", f'{service}.service')
+        process = await asyncio.create_subprocess_exec("sudo", "systemctl", "restart", f'postgrest.{service}.service')
         await process.wait()
         return await read_root(request)
 
 @app.post("/action/start")
 async def handle_form(request: Request, action: str = Form(...), service: str = Form(...)):
     if action == "start":
-        process = await asyncio.create_subprocess_exec("sudo", "systemctl", "start", f'{service}.service')
+        process = await asyncio.create_subprocess_exec("sudo", "systemctl", "start", f'postgrest.{service}.service')
         await process.wait()
         return await read_root(request)
 
 
 @app.get("/status/{service_name}")
 def get_service_status(service_name: str):
-    command = ["systemctl", "status", f'{service_name}.service']
+    command = ["systemctl", "status", f'postgrest.{service_name}.service']
+    print(command)
     result = subprocess.run(command, capture_output=True)
     return {"status": result.stdout.decode()}
 
