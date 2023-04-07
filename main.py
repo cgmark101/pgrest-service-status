@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request, Form
+from fastapi import FastAPI, Request, Form, RedirectResponse
 import subprocess
 import asyncio
 
@@ -12,6 +12,10 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 templates = Jinja2Templates(directory="templates")
 
+@app.get("/")
+async def root():
+    response = RedirectResponse(url="/status")
+    return response
 
 @app.get("/status", response_class=HTMLResponse)
 async def read_root(request: Request):
