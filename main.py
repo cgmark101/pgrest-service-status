@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Request, Form
 import subprocess
+import asyncio
 
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
@@ -16,13 +17,18 @@ templates = Jinja2Templates(directory="templates")
 async def read_root(request: Request):
     return templates.TemplateResponse("index.html", {'request':request})
 
+
+
 @app.post("/status")
-def handle_form(request: Request, action: str = Form(...), service: str = Form(...)):
+async def handle_form(request: Request, action: str = Form(...), service: str = Form(...)):
     if action == "stop":
-        subprocess.run(["sudo", "systemctl", "stop", f'postgrest.{service}.service'])
+        process = await asyncio.create_subprocess_exec("sudo", "systemctl", "stop", f'postgrest.{service}.service')
+        await process.wait()
     elif action == "restart":
-        subprocess.run(["sudo", "systemctl", "restart", f'postgrest.{service}.service'])
+        process = await asyncio.create_subprocess_exec("sudo", "systemctl", "restart", f'postgrest.{service}.service')
+        await process.wait()
     return read_root(request)
+
 
 @app.get("/status/{service_name}")
 def get_service_status(service_name: str):
