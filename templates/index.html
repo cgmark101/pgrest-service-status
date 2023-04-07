@@ -82,39 +82,10 @@
                 });
         }
 
-        function startService(serviceName) {
-            const data = new FormData();
-            data.append("action", "start");
-            data.append("service", serviceName);
 
-            fetch(`/action/start/`, {
-                method: "POST",
-                body: data
-            })
-                .then(() => {
-                    updateStatus(serviceName, `status-${serviceName}`);
-                })
-                .catch(error => {
-                    console.log(error);
-                });
-        }
-
-        updateStatus("admision", "status-admision");
-        updateStatus("cc2000", "status-cc2000");
-        updateStatus("comedor", "status-comedor");
-        updateStatus("dacepro", "status-dacepro");
-        updateStatus("dacepto", "status-dacepto");
-        updateStatus("diplomad", "status-diplomad");
-        updateStatus("fdocente", "status-fdocente");
-        updateStatus("helpdesk", "status-helpdesk");
-        updateStatus("ningreso", "status-ningreso");
-        updateStatus("postgrad", "status-postgrad");
-        updateStatus("solic", "status-solic");
-        updateStatus("solicita", "status-solicita");
-        updateStatus("tgpp", "status-tgpp");
-        updateStatus("userdoc", "status-userdoc");
-        updateStatus("usersdb", "status-usersdb");
-        updateStatus("usuarios", "status-usuarios");
+        {% for database in databases %}
+        updateStatus("{{database}}", "status-{{database}}");
+        {% endfor %}
 
         <!-- add more services here -->
     </script>
