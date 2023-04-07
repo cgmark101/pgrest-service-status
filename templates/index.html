@@ -41,6 +41,15 @@
                 <button onclick="startService('comedor')">Start</button>
             </td>
         </tr>
+        <tr>
+            <td>postgrest.dacepro.service</td>
+            <td><span id="status-dacepro">Loading...</span></td>
+            <td>
+                <button onclick="stopService('dacepro')">Stop</button>
+                <button onclick="restartService('dacepro')">Restart</button>
+                <button onclick="startService('dacepro')">Start</button>
+            </td>
+        </tr>
         <!-- add more services here -->
     </table>
     <script>
@@ -86,8 +95,9 @@
 
         function restartService(serviceName) {
             const data = new FormData();
-            data.append("action", "stop");
+            data.append("action", "restart");
             data.append("service", serviceName);
+
             fetch(`/action/restart`, {
                 method: "POST",
                 body: data
@@ -101,7 +111,14 @@
         }
 
         function startService(serviceName) {
-            fetch(`/action/start/`)
+            const data = new FormData();
+            data.append("action", "start");
+            data.append("service", serviceName);
+
+            fetch(`/action/start/`, {
+                method: "POST",
+                body: data
+            })
                 .then(() => {
                     updateStatus(serviceName, `status-${serviceName}`);
                 })
@@ -113,6 +130,7 @@
         updateStatus("admision", "status-admision");
         updateStatus("cc2000", "status-cc2000");
         updateStatus("comedor", "status-comedor");
+        updateStatus("dacepro", "status-dacepro");
         <!-- add more services here -->
     </script>
 </body>

@@ -19,22 +19,24 @@ async def read_root(request: Request):
 
 @app.post("/action/stop")
 async def handle_form(request: Request, action: str = Form(...), service: str = Form(...)):
-    print(action, service)
-    process = await asyncio.create_subprocess_exec("sudo", "systemctl", "stop", f'postgrest.{service}.service')
-    await process.wait()
-    return await read_root(request)
+    if action == "stop":
+        process = await asyncio.create_subprocess_exec("sudo", "systemctl", "stop", f'postgrest.{service}.service')
+        await process.wait()
+        return await read_root(request)
 
 @app.post("/action/restart")
 async def handle_form(request: Request, action: str = Form(...), service: str = Form(...)):
-    process = await asyncio.create_subprocess_exec("sudo", "systemctl", "restart", f'postgrest.{service}.service')
-    await process.wait()
-    return await read_root(request)
+    if action == "restart":
+        process = await asyncio.create_subprocess_exec("sudo", "systemctl", "restart", f'postgrest.{service}.service')
+        await process.wait()
+        return await read_root(request)
 
 @app.post("/action/start")
 async def handle_form(request: Request, action: str = Form(...), service: str = Form(...)):
-    process = await asyncio.create_subprocess_exec("sudo", "systemctl", "start", f'postgrest.{service}.service')
-    await process.wait()
-    return await read_root(request)
+    if action == "start":
+        process = await asyncio.create_subprocess_exec("sudo", "systemctl", "start", f'postgrest.{service}.service')
+        await process.wait()
+        return await read_root(request)
 
 
 @app.get("/status/{service_name}")
